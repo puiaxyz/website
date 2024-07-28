@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@vite(['resources/js/app.js', 'resources/css/app.css'])
 @section('content')
 <div class="container">
     <div class="payment-history-table">

@@ -1,14 +1,12 @@
 @extends('layouts.app')
-
+@vite(['resources/js/app.js', 'resources/css/app.css'])
 @section('content')
-<div class="container admin-dashboard">
-    <div class="dashboard-header">
-        <h1 class="text-2xl font-bold">Admin Dashboard</h1>
-    </div>
+<div class="container">
+    <h1>Admin Dashboard</h1>
 
-    <div class="dashboard-content">
-        <div class="col-span-2">
-            <h2 class="text-xl font-semibold">Recent Transactions</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Recent Transactions</h2>
             <table class="table">
                 <thead>
                     <tr>
@@ -33,14 +31,16 @@
             </table>
         </div>
 
-        <div>
-            <h2 class="text-xl font-semibold">Payment Stats</h2>
+        <div class="col-md-4">
+            <h2>Payment Stats</h2>
             <canvas id="paymentChart"></canvas>
         </div>
+    </div>
 
-        <div>
-            <h2 class="text-xl font-semibold">Manage Users</h2>
-            <a href="{{ route('admin.users.create') }}" class="btn">Add User</a>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2>Manage Users</h2>
+            <a href="{{ route('admin.users.create') }}" class="btn btn-primary mb-2">Add User</a>
             <table class="table">
                 <thead>
                     <tr>
@@ -60,7 +60,7 @@
                             <td>{{ $student->usertype }}</td>
                             <td>
                                 <a href="{{ route('admin.users.edit', $student) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('admin.users.destroy', $student) }}" method="POST" class="inline-block">
+                                <form action="{{ route('admin.users.destroy', $student) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -71,12 +71,14 @@
                 </tbody>
             </table>
         </div>
+    </div>
 
-        <div>
-            <h2 class="text-xl font-semibold">Reports</h2>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2>Reports</h2>
             <form action="{{ route('admin.reports.generate') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn">Generate Report</button>
+                <button type="submit" class="btn btn-primary">Generate Report</button>
             </form>
         </div>
     </div>
