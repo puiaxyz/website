@@ -21,13 +21,17 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($duePayments as $payment)
-                    <tr>
-                        <td>{{ $payment->amount }}</td>
-                        <td>{{ $payment->status }}</td>
-                        <td><a href="{{ route('payment.create') }}" class="btn btn-primary">Pay Now</a></td>
-                    </tr>
-                @endforeach
+                <!-- student/dashboard.blade.php -->
+            @foreach ($duePayments as $payment)
+              <tr>
+                <td>{{ $payment->amount }}</td>
+                <td>{{ $payment->status }}</td>
+                <td>
+                    <a href="{{ route('payment.create', ['payment_id' => $payment->id]) }}" class="btn btn-primary">Pay Now</a>
+                </td>
+              </tr>
+            @endforeach
+
             </tbody>
         </table>
     </div>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaymentHistoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReportController;
@@ -9,10 +10,15 @@ use Illuminate\Support\Facades\Route;
 
 // Welcome route
 Route::get('/', function () {
+    if (Auth::check()) {
+        if (Auth::user()->usertype === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('dashboard');
+    }
+
     return view('welcome');
 });
-
-Route::get('/dashboard', [HomeController::class, 'studentDashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
@@ -24,20 +30,22 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
     Route::put('admin/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
-    Route::get('admin/payment/history', [PaymentController::class, 'adminPaymentHistory'])->name('admin.payment.history');
+    Route::get('admin/payment/history', [PaymentHistoryController::class, 'adminPaymentHistory'])->name('admin.payment.history');
 });
+
+Route::get('/dashboard', [HomeController::class, 'studentDashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::get('payment/create', [PaymentController::class, 'create'])->name('payment.create');
-    Route::post('payment/store', [PaymentController::class, 'store'])->name('payment.store');
-    Route::post('payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
-    Route::get('payment/receipt/{payment}', [PaymentController::class, 'showReceipt'])->name('payment.receipt');
+    // Route for initiating the payment process
+    Route::get('/payment/initiate/{payment}', [PaymentController::class, 'create'])->name('payment.create');
+    Route::post('/payment/store', [PaymentController::class, 'store'])->name('payment.store');
+    Route::post('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
+    Route::get('/payment/receipt/{payment}', [PaymentController::class, 'showReceipt'])->name('payment.receipt');
     Route::get('/payment/history', [PaymentController::class, 'studentPaymentHistory'])->name('student.payment.history');
-}); 
-
+});
 
 require __DIR__.'/auth.php';
+`

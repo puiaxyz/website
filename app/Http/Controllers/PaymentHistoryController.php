@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use Illuminate\Http\Request;
 
 class PaymentHistoryController extends Controller
 {
-    public function index()
+    public function adminPaymentHistory()
     {
-        // Fetch payment history for the logged-in user
-        $payments = auth()->user()->payments; // Adjust as per your data structure
-        
-        return view('payment-history', compact('payments'));
+        // Fetch paid and due payments with pagination
+        $paidPayments = Payment::where('status', 'paid')->paginate(10);
+        $duePayments = Payment::where('status', 'due')->paginate(10);
+
+        return view('admin.payment-history', compact('paidPayments', 'duePayments'));
     }
 }

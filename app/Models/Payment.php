@@ -10,7 +10,7 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'amount', 'status', 'transaction_id', 'order_id', 'signature'
+        'user_id', 'amount', 'status', 'razorpay_order_id', 'razorpay_payment_id', 'razorpay_signature'
     ];
 
     public function user()

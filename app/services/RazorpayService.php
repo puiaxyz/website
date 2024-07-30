@@ -15,17 +15,19 @@ class RazorpayService
 
     public function createOrder($amount)
     {
-        $order = $this->api->order->create([
+        return $this->api->order->create([
             'amount' => $amount * 100, // Amount in paise
             'currency' => 'INR',
-            'payment_capture' => 1
+            'receipt' => uniqid()
         ]);
-
-        return $order;
     }
 
     public function verifySignature($attributes)
     {
-        return $this->api->utility->verifyPaymentSignature($attributes);
+        $api = $this->api;
+        $attributes['razorpay_order_id'] = $attributes['razorpay_order_id'];
+        $attributes['razorpay_payment_id'] = $attributes['razorpay_payment_id'];
+        $attributes['razorpay_signature'] = $attributes['razorpay_signature'];
+        $api->utility->verifyPaymentSignature($attributes);
     }
 }

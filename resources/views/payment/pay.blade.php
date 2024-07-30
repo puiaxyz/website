@@ -20,7 +20,7 @@ document.getElementById('payButton').addEventListener('click', function(e) {
 
     var options = {
         "key": "{{ config('services.razorpay.key') }}",
-        "amount": "{{ $amount * 100 }}",
+        "amount": "{{ $amount * 100 }}",  // Use the amount variable here
         "currency": "INR",
         "name": "{{ $user->name }}",
         "description": "Test Transaction",

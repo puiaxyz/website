@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Jobs\GenerateReport;
 use App\Models\Payment;
 use Carbon\Carbon;
-use PDF;
 
 class ReportController extends Controller
 {
@@ -25,8 +24,14 @@ class ReportController extends Controller
 
     public function generate(Request $request)
     {
-        GenerateReport::dispatch();
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-        return redirect()->route('admin.reports')->with('status', 'Report generation started!');
+        // Dispatch job with date range parameters
+        $reportJob = new GenerateReport($startDate, $endDate);
+        $path = $reportJob->handle();
+
+        // Return a response to initiate file download
+        return response()->download($path);
     }
 }
