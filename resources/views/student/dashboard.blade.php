@@ -27,8 +27,8 @@
                 <td>{{ $payment->amount }}</td>
                 <td>{{ $payment->status }}</td>
                 <td>
-                    <a href="{{ route('payment.create', ['payment_id' => $payment->id]) }}" class="btn btn-primary">Pay Now</a>
-                </td>
+                <a href="{{ route('payment.create', ['payment' => $payment->id]) }}" class="btn btn-primary">Pay Now</a>
+
               </tr>
             @endforeach
 

@@ -67,5 +67,31 @@ class UserController extends Controller
         $students = User::where('usertype', 'student')->get();
         return view('admin.manage-users', compact('students'));
     }
+    public function showAssignPaymentForm()
+{
+    $students = User::where('usertype', 'student')->with(['payments' => function ($query) {
+        $query->where('status', 'due');
+    }])->get();
 
+    return view('admin.assign-payment', compact('students'));
+}
+
+public function assignPayments(Request $request)
+{
+    $request->validate([
+        'user_ids' => 'required|array',
+        'user_ids.*' => 'exists:users,id',
+        'payment_amount' => 'required|numeric|min:0',
+    ]);
+
+    foreach ($request->user_ids as $userId) {
+        $user = User::findOrFail($userId);
+        $user->payments()->create([
+            'amount' => $request->payment_amount,
+            'status' => 'due',
+        ]);
+    }
+
+    return redirect()->route('admin.assign.payment')->with('success', 'Payments assigned successfully.');
+}
 }

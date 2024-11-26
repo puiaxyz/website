@@ -52,7 +52,7 @@ public function isAdmin()
     return $this->usertype === 'admin';
 }
 
-
+ 
     public function payments()
     {
         return $this->hasMany(Payment::class);

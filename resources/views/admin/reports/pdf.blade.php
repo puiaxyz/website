@@ -19,7 +19,7 @@
             @foreach($payments as $payment)
                 <tr>
                     <td>{{ $payment->razorpay_order_id }}</td>
-                    <td>{{ $payment->user->username }}</td> <!-- Assuming user relationship exists -->
+                    <td>{{ $payment->user->username }}</td> 
                     <td>{{ $payment->amount }}</td>
                     <td>{{ $payment->status }}</td>
                     <td>{{ $payment->created_at->format('Y-m-d') }}</td>

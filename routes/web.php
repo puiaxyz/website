@@ -7,6 +7,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
+require __DIR__.'/auth.php';
 
 // Welcome route
 Route::get('/', function () {
@@ -31,8 +32,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('admin/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
     Route::get('admin/payment/history', [PaymentHistoryController::class, 'adminPaymentHistory'])->name('admin.payment.history');
-});
+    Route::get('/admin/assign-payment', [UserController::class, 'showAssignPaymentForm'])->name('admin.assign.payment');
+    Route::post('/admin/assign-payment', [UserController::class, 'assignPayments'])->name('admin.assign.payment.submit');
 
+    // Ensure this route is defined here
+    Route::post('admin/users/assign-payments', [UserController::class, 'assignPayments'])->name('admin.users.assignPayments');
+});
 Route::get('/dashboard', [HomeController::class, 'studentDashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -47,5 +52,3 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/history', [PaymentController::class, 'studentPaymentHistory'])->name('student.payment.history');
 });
 
-require __DIR__.'/auth.php';
-`

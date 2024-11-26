@@ -18,7 +18,8 @@ class RazorpayService
         return $this->api->order->create([
             'amount' => $amount * 100, // Amount in paise
             'currency' => 'INR',
-            'receipt' => uniqid()
+            'receipt' => uniqid(),
+            'payment_capture' => 1  // Capture payment immediately
         ]);
     }
 
